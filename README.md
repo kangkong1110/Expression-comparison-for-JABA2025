@@ -11,14 +11,14 @@
 
 ## 必要環境（Requirements）
 - Python 3.10.9  
-  ※それ以前のバージョンでも動作する可能性がありますが、確認はしていません。
-- Windows環境で動作確認済み  
-  ※macOS や Linux ではフォント読み込みなど一部動作しない可能性があります。
+  ※それ以前のバージョンでも動作する可能性がありますが、確認はしていません
+- Windows環境
+  ※macOS や Linux ではフォント読み込みなど一部動作しない可能性があります
 - 必要なPythonライブラリは `requirements.txt` に記載
-- OpenFace（https://github.com/TadasBaltrusaitis/OpenFace）  
+- OpenFace (https://github.com/TadasBaltrusaitis/OpenFace)  
   - 本リポジトリは OpenFace の `FeatureExtraction.exe` を外部から呼び出します  
   - 利用には別途 OpenFace のダウンロードとライセンス確認が必要です
-
+- ffmpeg (http://ffmpeg.org/)
 ## セットアップ手順（Installation）
 
 1. **ffmpeg をインストール**
@@ -60,7 +60,7 @@
 
 ## 使い方（Usage）
 ```bash
-python CalcCosSimiVideos.py
+CalcCosSimiVideos.py
 ```
 
 実行すると、コマンドプロンプト上で以下のように動画ファイルのパスを入力するよう求められます（例: "C:\Users\yourname\sample.mp4"）。引用符付きでそれぞれ入力してください。
