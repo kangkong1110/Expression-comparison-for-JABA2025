@@ -11,6 +11,7 @@
 
 ## 必要環境（Requirements）
 - Python 3.10.9 python3の以前のバージョンでも動く可能性はありますが、動作確認はしていません。
+- Windows環境で動作確認済み。mac, linuxではフォントの読み込みがうまくいかないかもしれません。
 - 必要なライブラリは `requirements.txt` に記載されています
 - OpenFace（https://github.com/TadasBaltrusaitis/OpenFace）
   - 本リポジトリは OpenFace の `FeatureExtraction.exe` を外部から呼び出します
