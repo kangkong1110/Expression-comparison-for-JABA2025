@@ -28,7 +28,8 @@
 6. コマンドプロンプト上で実行する
 
 ## 使い方（Usage）
-python CalcCosSimiVideos.py
+   ```bash
+   python CalcCosSimiVideos.py
 
 コマンドプロンプト上で以下の表示が出てくるため、動画のパスを引用付きで入力する("C:\Users\yourname\sample.mp4")。エクスプローラ上でパスのコピーをしてください。
 見本動画のパスを入力してください：
