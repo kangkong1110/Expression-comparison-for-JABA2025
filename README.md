@@ -1,13 +1,18 @@
 # Expression-comparison-for-JABA2025
 
 ## 概要（Overview）
-このリポジトリは、OpenFaceを用いて抽出した顔のアクションユニットを比較し、コサイン類似度を計算・可視化するPythonスクリプトを含みます。学会発表「[発表タイトル]」（[行動分析学会第43回年次大会], [発表年月]）に関連しています。
+このリポジトリは、**2者間の顔表情の類似度を動画上で可視化**するツールです。  
+OpenFaceを用いて抽出した顔のアクションユニット（表情筋の動き）をもとに、各フレームの類似度（コサイン類似度）を計算し、比較動画の下部に数値として表示します。
+ディープフェイクで作成した動画の類似度を定量的に評価する目的で作成しました。
+
+本ツールは、**行動分析学会第43回年次大会**でのポスター発表  
+「[発表タイトル]」に関連して開発されたものです。  
 
 ## 特徴（Features）
-- OpenFaceによる顔特徴量抽出の自動処理
-- 2者間の表情類似度（コサイン類似度）の計算
-- 類似度付きのフレーム画像出力（PILで画像合成）
-- CSVによる類似度出力と統計処理の準備
+- OpenFaceによる17種類のアクションユニット抽出
+- 見本動画と比較動画の**コサイン類似度をフレーム単位で計算**
+- 類似度を数値として**色付き字幕(青～赤)で可視化**
+- 類似度をcsvに出力
 
 ## 必要環境（Requirements）
 - Python 3.10.9  
@@ -27,16 +32,16 @@
      - 方法: 「スタート」→「環境変数の編集」→「Path」→ `C:\ffmpeg\bin` を追加
 
 2. **OpenFace をセットアップ**
-   - [OpenFace Releases](https://github.com/TadasBaltrusaitis/OpenFace/releases) から `OpenFace_2.2.0_win_x64.zip` をダウンロードし、任意の場所に解凍してください  
-     ※バイナリ版（.zip）を選んでください（ソースコード版ではありません）
-   - OpenFace の公式セットアップガイドも参照すると安心です：  
+   - [OpenFace Releases](https://github.com/TadasBaltrusaitis/OpenFace/releases) から**OpenFace_2.2.0_win_x64.zip**をダウンロードし、任意の場所に解凍してください  
+     ※バイナリ版（.zip）を選んでください（ソースコード版ではありません）。
+     OpenFace の公式セットアップガイドも参照すると分かりやすいです： 
      [OpenFace - Windows Installation](https://github.com/TadasBaltrusaitis/OpenFace/wiki/Windows-Installation)
    - **Visual C++ 2017 再頒布可能パッケージ**をインストールしてください（これがないと `.exe` が起動しません）  
      ダウンロード先：[Microsoft Visual C++ 再頒布可能パッケージ](https://visualstudio.microsoft.com/ja/downloads/)
    - **モデルファイルをダウンロード**してください：  
      解凍した OpenFace フォルダ内にある `download_models.ps1` を右クリック → 「PowerShellで実行」  
      これにより、必要な学習済みモデルファイルが `model/` 以下にダウンロードされます
-   - 最後に、`FeatureExtraction.exe` のフルパスを確認して控えてください  
+   - 最後に、`FeatureExtraction.exe` のフルパスを確認して控えてください。
      例：`C:\Tools\OpenFace_2.2.0_win_x64\FeatureExtraction.exe`
 
 3. **このリポジトリをクローン**
@@ -47,34 +52,28 @@
    
 4. **必要なPythonライブラリをインストール**
    ```bash
-   cd Expression-comparison-for-JABA2025
-   pip install -r requirements.txt
+   pip install numpy pandas
    
-5. **CalcCosSimiVideos.py 内の以下の行を、自分の環境に合わせて編集**
-   ```bash
-   feature_exe = r"C:\Tools\OpenFace_2.2.0_win_x64\FeatureExtraction.exe"
-   
-6. **スクリプトを実行**
-   ```bash
-   CalcCosSimiVideos.py
-
 ## 使い方（Usage）
+コマンドプロンプトで、パスを変更した以下のコマンドを入力してください。
 ```bash
-CalcCosSimiVideos.py
+python CalcCosSimiVideos_fast.py ^
+  --model_video "path/to/originalvideo.mp4" ^
+  --comp_video  "path/to/deepfake.mp4" ^
+  --openface_exe "path/to/OpenFace/FeatureExtraction.exe"
 ```
 
-実行すると、コマンドプロンプト上で以下のように動画ファイルのパスを入力するよう求められます（例: "C:\Users\yourname\sample.mp4"）。引用符付きでそれぞれ入力してください。
-※エクスプローラでファイルを右クリック → 「パスのコピー」でコピペできます。
-```bash
-見本動画のパスを入力してください：
-比較動画のパスを入力してください：
-```
+**引数の説明**
+- `--model_video`: 基準となる見本動画(出力動画の左側に表示されます)
+- `--comp_video`: 比較対象の動画(出力動画の右側に表示されます)
+- `--openface_exe`: OpenFaceのFeatureExtraction.exeのフルパス
 
 **出力ファイル：**
-- `combined_frames`：類似度付きフレーム画像
-- `output.mp4`：類似度を記載した動画
-- `summary.csv`：コサイン類似度のcsv
-- 見本動画及び比較動画を分割したフレーム(動画名と同名フォルダに格納)
+- 見本動画及び比較動画を分割したフレーム(5桁の連番.jpg。動画名と同名フォルダに格納)
+- `processed`：openfaceによる処理結果ファイル
+- `summary.csv`：各フレームのコサイン類似度一覧
+- `sim.ass`：コサイン類似度を記載した字幕ファイル
+- `output.mp4`：類似度つき比較動画
 
 ## 使用ライブラリとライセンス
 
